@@ -1,8 +1,10 @@
 class PlacesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+
+end
 
   def index
-    @places = Place.all
+    @places = Place.all.page params[:page]
   end
   
   def new
@@ -27,7 +29,7 @@ class PlacesController < ApplicationController
 
   def update
     @place = Place.find(params[:id])
-    if @place.user != current_user
+    if @place.user != current_user21
       return render plain: 'Not Allowed', status: :forbidden
     end
 
@@ -37,6 +39,10 @@ class PlacesController < ApplicationController
 
   def destroy
     @place = Place.find(params[:id])
+    if @place.user != current_user
+      return render plain: 'Not Allowed', status: :forbidden
+    end
+
     @place.destroy
     redirect_to root_path  
   end
@@ -46,5 +52,6 @@ class PlacesController < ApplicationController
   def place_params
     params.require(:place).permit(:name, :description, :address)
   end
+
 end
 
