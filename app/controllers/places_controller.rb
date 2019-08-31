@@ -1,10 +1,9 @@
 class PlacesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
-end
 
   def index
-    @places = Place.all.page params[:page]
+    @places = Place.order(:id).paginate(:page => params[:page], :per_page => 10)
   end
   
   def new
@@ -62,6 +61,5 @@ end
   def place_params
     params.require(:place).permit(:name, :description, :address)
   end
-
 end
 
