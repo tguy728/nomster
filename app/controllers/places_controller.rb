@@ -3,7 +3,7 @@ class PlacesController < ApplicationController
 
 
   def index
-    @places = Place.order(:id).paginate(:page => params[:page], :per_page => 10)
+    @places = Place.all.page params[:page]
   end
   
   def new
@@ -36,7 +36,7 @@ class PlacesController < ApplicationController
     if @place.user != current_user
       return render plain: 'Not Allowed', status: :forbidden
     end
-  end
+  
 
     @place.update_attributes(place_params)
     if @place.valid?
