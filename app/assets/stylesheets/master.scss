@@ -16,6 +16,7 @@
 .deep-padding {
   padding-bottom: 80px;
   margin-bottom: 20px;
+  margin-top: -30px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -43,4 +44,8 @@ body {
   background-color: #FFEEEE;
   border-radius: 3px;
   padding: 2px 8px 2px 8px;
+}
+
+#map {
+  height: 300px;
 }

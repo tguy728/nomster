@@ -59,6 +59,8 @@ gem 'devise'
 gem "font-awesome-rails"
 gem 'httparty'
 gem 'kaminari'
+gem 'geocoder', '~> 1.3', '>= 1.3.7'
+gem "figaro"
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.3.3'
 end
