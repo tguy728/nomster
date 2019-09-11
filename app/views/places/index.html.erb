@@ -4,7 +4,9 @@
     <i><%= place.address %></i>
     <br /><br  />
     <p><%= place.description %></p>
-
+  </div>
+  </div>
+  </div>
     <% if place.user.present? %>
       <small><%= place.user.email %></small>
     <% end %>
@@ -21,3 +23,4 @@
   </div>
 <% end %>
 <%= paginate @places %>
+<% end %>
