@@ -1,42 +1,30 @@
 <div class="booyah-box col-10 offset-1">
   <h1><%= @place.name %></h1>
   <i><%= @place.address %></i>
-  <br/><br/>
+  <br/>
+  <br/>
   <p><%= @place.description %></p>
+  <% if @place.latitude.present? && @place.longitude.present? %>
+    <script>
+      function initMap() {
+        var myLatLng = {lat: <%= @place.latitude %>, lng: <%= @place.longitude %>};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: myLatLng
+        });
+        var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello World!'
+        });
+      }
+    </script>
 
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeZY90Tz9k87JWumVaFvTzXNM8ByIvNGk&callback=initMap"></script>
   
-
-<% if @place.latitude.present? && @place.longitude.present? %>
-
-  <script>
-
-    function initMap() {
-       var myLatLng = {lat: <%= @place.latitude %>, lng: <%= @place.longitude %>};
-
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 12,
-        center: myLatLng
-      });
-
-      var marker = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        title: 'Hello World!'
-      });
-    }
-  </script>
-
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeZY90Tz9k87JWumVaFvTzXNM8ByIvNGk&callback=initMap">
-  </script>
-  
-  <div id="map"></div>
-<% end %>
-  
-
-<br />
-
+    <div id="map"></div>
+  <% end %>
+  <br />
   <div class="deep-padding float-right">
     <% if current_user && current_user == @place.user %>
       <%= link_to 'Edit', edit_place_path(@place), class: 'btn btn-primary' %>
@@ -44,6 +32,7 @@
     <% end %>
   </div>
 </div>
+
 <!-- Button trigger modal -->
 
 
@@ -72,38 +61,43 @@
 </div>
 
 <div class="col-10 offset-1">
-<h1 class="float-left">Comments</h1>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg float-right" data-toggle="modal" data-target="#myModal">
-  Add a comment
-</button>
+  <h1 class="float-left">Comments</h1>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-lg float-right" data-toggle="modal" data-target="#myModal">
+    Add a comment
+  </button>
 </div>
 
 <div class="clear"></div>
 
 <div class="row">
-<% @place.comments.each do |comment| %>
-  <div class="col-12 col-sm-6">
-    <blockquote>
-      <% if comment.humanized_rating.present? %>
-       <b><%= comment.humanized_rating %></b> -
-      <% end %>
-      <%= comment.message %>
-      <small><%= comment.user.email %></small>
-    </blockquote>
+  <% @place.comments.each do |comment| %>
+    <div class="col-12 col-sm-6">
+      <blockquote>
+        <% if comment.humanized_rating.present? %>
+        <b><%= comment.humanized_rating %></b> -
+        <% end %>
+        <%= comment.message %>
+        <small><%= comment.user.email %></small>
+      </blockquote>
+    </div>
+  <%end%>
+</div>
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Add photos</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">Add a photos</h4>
+        
       </div>
-      <%= simple_form_for @photos, url: place_photos_path(@place) do |f| %>
+      <%= simple_form_for @photo, url: place_photos_path(@place) do |f| %>
         <div class="modal-body">
           <%= f.input :caption %>
+          <%= f.input :picture %>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -114,25 +108,23 @@
   </div>
 </div>
 
-<div class="col-20 offset-1">
-<h1 class="float-left">Photos</h1>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg float-right" data-toggle="modal" data-target="#myModal">
-  Add photos
-</button>
+<div class="col-10 offset-1">
+  <h1 class="float-left">Photos</h1>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-lg float-right" data-toggle="modal" data-target="#myModal">
+    Add photos
+  </button>
 </div>
 
 <div class="clear"></div>
 
 <div class="row">
-<% @place.photos.each do |photos| %>
-  <div class="col-18 col-sm-10">
-    <blockquote>
-      <% end %>
+  <% @place.photos.each do |photo| %>
+    <div class="col-12 col-sm-6">
+      <blockquote>
+      <%=image_tag photo.picture.url %>  
       <%= photos.message %>
       <small><%= photos.user.email %></small>
     </blockquote>
-
-<% end %>
-
-
+  <% end %>
+</div>
